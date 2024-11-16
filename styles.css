@@ -110,4 +110,17 @@ body {
   .goal-item[draggable="true"]:hover {
     border: 2px solid #a9eaa5; /* Show dashed border when hovering over an item */
   }
+/* Fade-out effect */
+@keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  .goal-item.fade-out {
+    animation: fadeOut 1s forwards;
+  }
   
