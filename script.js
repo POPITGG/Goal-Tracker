@@ -77,12 +77,15 @@ function addGoal(type) {
 }
 
 function deleteGoal(listItem, goal) {
+  // Add the 'fade-out' class to start the animation
   listItem.classList.add('fade-out');
+
+  // After the animation ends (1 second), remove the item from the DOM
   setTimeout(() => {
     listItem.remove();
     // Remove the goal from local storage
     removeTaskFromLocalStorage(goal);
-  }, 500);
+  }, 1000); // This matches the duration of the fade-out animation
 }
 
 let draggedItem = null;
@@ -172,5 +175,6 @@ function loadTasks() {
     goalsList.appendChild(li);
   });
 }
+
 
 
