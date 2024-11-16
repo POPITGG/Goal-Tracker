@@ -35,11 +35,13 @@ function addGoal(type) {
   const deadline = document.getElementById(`${type}-deadline`);
   const goalsList = document.getElementById(`${type}-goals`);
 
+  // Make sure goal is not empty
   if (!input.value.trim()) {
     alert('Please enter a goal!');
     return;
   }
 
+  // Make sure Medium and Long goals have a deadline
   if ((type === 'medium' || type === 'long') && !deadline.value) {
     alert('Please add a date for your goal!');
     return;
@@ -51,7 +53,7 @@ function addGoal(type) {
     type: type
   };
 
-  // Save the goal to local storage
+  // Add goal to local storage
   saveTaskToLocalStorage(goal);
 
   const li = document.createElement('li');
@@ -61,7 +63,7 @@ function addGoal(type) {
     <span>${goal.text} ${goal.deadline ? `(Deadline: ${goal.deadline})` : ''}</span>
   `;
 
-  li.addEventListener('click', () => deleteGoal(li));
+  li.addEventListener('click', () => deleteGoal(li, goal));
   li.addEventListener('dragstart', (e) => dragStart(e));
   li.addEventListener('dragover', (e) => dragOver(e));
   li.addEventListener('dragenter', (e) => dragEnter(e));
@@ -71,15 +73,15 @@ function addGoal(type) {
 
   goalsList.appendChild(li);
   input.value = '';
-  if (deadline) deadline.value = '';  // Clear deadline input after adding goal
+  if (deadline) deadline.value = '';  // Clear the deadline input after adding the goal
 }
 
-function deleteGoal(listItem) {
+function deleteGoal(listItem, goal) {
   listItem.classList.add('fade-out');
   setTimeout(() => {
     listItem.remove();
     // Remove the goal from local storage
-    removeTaskFromLocalStorage(listItem);
+    removeTaskFromLocalStorage(goal);
   }, 500);
 }
 
@@ -140,10 +142,9 @@ function saveTaskToLocalStorage(goal) {
 }
 
 // Remove task from local storage
-function removeTaskFromLocalStorage(listItem) {
+function removeTaskFromLocalStorage(goal) {
   let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  const text = listItem.querySelector('span').textContent;
-  tasks = tasks.filter(task => task.text !== text);  // Remove task by text
+  tasks = tasks.filter(task => task.text !== goal.text);  // Remove task by its text
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
@@ -160,7 +161,7 @@ function loadTasks() {
       <span>${task.text} ${task.deadline ? `(Deadline: ${task.deadline})` : ''}</span>
     `;
 
-    li.addEventListener('click', () => deleteGoal(li));
+    li.addEventListener('click', () => deleteGoal(li, task));
     li.addEventListener('dragstart', (e) => dragStart(e));
     li.addEventListener('dragover', (e) => dragOver(e));
     li.addEventListener('dragenter', (e) => dragEnter(e));
@@ -171,4 +172,5 @@ function loadTasks() {
     goalsList.appendChild(li);
   });
 }
+
 
