@@ -40,13 +40,18 @@ function addGoal(type) {
     return;
   }
 
+  if ((type === 'medium' || type === 'long') && !deadline.value) {
+    alert('Please add a date for your goal!');
+    return;
+  }
+
   const goal = {
     text: input.value.trim(),
     deadline: type !== 'daily' && deadline?.value ? deadline.value : null,
     type: type
   };
 
-  // Add the goal to the local storage
+  // Save the goal to local storage
   saveTaskToLocalStorage(goal);
 
   const li = document.createElement('li');
@@ -66,7 +71,7 @@ function addGoal(type) {
 
   goalsList.appendChild(li);
   input.value = '';
-  if (deadline) deadline.value = '';
+  if (deadline) deadline.value = '';  // Clear deadline input after adding goal
 }
 
 function deleteGoal(listItem) {
@@ -166,3 +171,4 @@ function loadTasks() {
     goalsList.appendChild(li);
   });
 }
+
