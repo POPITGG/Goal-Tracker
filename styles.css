@@ -65,7 +65,7 @@ body {
     max-width: 600px;
   }
   
-  .goal-item {
+.goal-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -78,13 +78,16 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: move; /* Indicate that the item can be dragged */
     flex-wrap: wrap; /* Allow items to wrap */
+    max-width: 100%; /* Ensure the item does not exceed the container width */
+    overflow: hidden; /* Prevent overflow */
 }
 
 .goal-item .text {
     flex: 1; /* Allow the text to take available space */
     word-wrap: break-word; /* Break long words and wrap text */
     overflow-wrap: break-word; /* Ensure text wraps correctly */
-    max-width: 70%; /* Set a maximum width for the text */
+    word-break: break-all; /* Break long unbreakable words */
+    max-width: 100%; /* Allow text to take full width of the item */
 }
   
   /* Hover Effect */
