@@ -77,7 +77,15 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: move; /* Indicate that the item can be dragged */
-  }
+    flex-wrap: wrap; /* Allow items to wrap */
+}
+
+.goal-item .text {
+    flex: 1; /* Allow the text to take available space */
+    word-wrap: break-word; /* Break long words and wrap text */
+    overflow-wrap: break-word; /* Ensure text wraps correctly */
+    max-width: 70%; /* Set a maximum width for the text */
+}
   
   /* Hover Effect */
   .goal-item:hover {
@@ -115,15 +123,15 @@ body {
 
 /* Fade-out effect */
 @keyframes fadeOut {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
+  0% {
+    opacity: 1;
   }
-  
-  .goal-item.fade-out {
-    animation: fadeOut 1s forwards;
+  100% {
+    opacity: 0;
   }
-  
+}
+
+.goal-item.fade-out {
+  animation: fadeOut 1s forwards;
+}
+
