@@ -176,5 +176,3 @@ function loadTasks() {
   });
 }
 
-
-
