@@ -1,0 +1,113 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f8ff; /* Light blue background */
+    color: #333;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  header {
+    padding: 20px;
+    background: #4caf50; /* Green header */
+    color: white;
+    text-align: center;
+    border-bottom: 5px solid #3a8c41; /* Darker green border */
+  }
+  
+  nav {
+    margin-top: 10px;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #008cba; /* Blue button */
+    color: white;
+  }
+  
+  button:hover {
+    background: #005f75;
+  }
+  
+  /* Main Section Styling */
+  .goal-section {
+    padding: 20px;
+    text-align: center; /* Center content */
+  }
+  
+  .goal-section h2 {
+    margin-bottom: 20px;
+    color: #4caf50;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  /* Task List */
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 600px;
+  }
+  
+  .goal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9; /* Light background for items */
+    margin: 10px 0;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: move; /* Indicate that the item can be dragged */
+  }
+  
+  /* Hover Effect */
+  .goal-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Input Fields */
+  input[type="text"], input[type="date"] {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
+  }
+  
+  /* Fade-out effect */
+  .fade-out {
+    opacity: 0;
+    transform: translateX(20px); /* Optional: add slide-out effect */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  /* Visual indication while dragging */
+  .goal-item[draggable="true"] {
+    opacity: 1;
+  }
+  
+  .goal-item[draggable="true"]:hover {
+    border: 2px solid #a9eaa5; /* Show dashed border when hovering over an item */
+  }
+  
