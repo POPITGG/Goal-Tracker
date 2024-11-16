@@ -110,6 +110,9 @@ body {
   .goal-item[draggable="true"]:hover {
     border: 2px solid #a9eaa5; /* Show dashed border when hovering over an item */
   }
+  
+  /* Add this to your existing CSS file */
+
 /* Fade-out effect */
 @keyframes fadeOut {
     0% {
