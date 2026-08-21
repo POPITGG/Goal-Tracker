@@ -1,48 +1,168 @@
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mērķu Izsekotājs</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitFlow — Personal Workout</title>
+<style>
+:root{--bg:#0b0d10;--card:#15191f;--card2:#1d232b;--text:#f6f7f9;--muted:#9ca5b1;--accent:#b9ff3d;--danger:#ff6574;--line:#2b323c}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#1a2115 0,#0b0d10 38%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input,select{font:inherit} button{cursor:pointer}.app{max-width:760px;margin:auto;padding:22px 18px 60px}.brand{font-weight:900;letter-spacing:-1px;font-size:22px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.pill{border:1px solid var(--line);padding:8px 12px;border-radius:999px;color:var(--muted);font-size:12px}
+.screen{display:none}.screen.active{display:block}.hero{padding:34px 0 24px}.eyebrow{color:var(--accent);font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:1.5px}.hero h1{font-size:clamp(38px,8vw,66px);line-height:.98;letter-spacing:-3px;margin:12px 0}.hero p{color:var(--muted);font-size:16px;line-height:1.55;max-width:570px}
+.progress{height:6px;background:#20252b;border-radius:20px;overflow:hidden;margin:20px 0 35px}.progress i{display:block;height:100%;background:var(--accent);width:0;transition:.3s}
+.question h2{font-size:34px;letter-spacing:-1.5px;margin:0 0 8px}.question>p{color:var(--muted);margin:0 0 22px}.choices{display:grid;gap:12px}.choice{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;text-align:left;color:var(--text);transition:.18s;min-height:70px}.choice:hover,.choice.selected{border-color:var(--accent);background:#18200f;transform:translateY(-1px)}.choice strong{display:block;font-size:18px}.choice span{color:var(--muted);font-size:13px}.inputbox{width:100%;background:var(--card);border:1px solid var(--line);color:var(--text);padding:22px;border-radius:18px;font-size:28px;outline:none}.inputbox:focus{border-color:var(--accent)}
+.actions{display:flex;gap:10px;margin-top:24px}.primary,.secondary{border:0;border-radius:16px;padding:16px 22px;font-weight:850}.primary{background:var(--accent);color:#111}.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line)}
+.error{color:var(--danger);margin-top:12px;font-weight:700}.summary,.workout-card,.admin-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;margin:14px 0}.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:var(--card2);border-radius:14px;padding:14px}.stat small{color:var(--muted);display:block}.stat b{font-size:18px}.workout-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.workout-head h3{margin:0;font-size:22px}.tag{font-size:11px;padding:6px 9px;border-radius:999px;background:#26321a;color:var(--accent);font-weight:800}.exercise{padding:16px 0;border-top:1px solid var(--line)}.exercise:first-of-type{border-top:0}.exercise-row{display:flex;justify-content:space-between;gap:15px}.exercise h4{margin:0 0 5px;font-size:17px}.exercise p{margin:0;color:var(--muted);font-size:13px}.meta{text-align:right;white-space:nowrap}.meta b{display:block}.meta span{color:var(--muted);font-size:12px}.nav{display:flex;gap:8px;overflow:auto;margin:18px 0}.nav button{white-space:nowrap}.hidden{display:none!important}.admin textarea{min-height:110px;resize:vertical}.admin input,.admin select,.admin textarea{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--text);padding:13px;border-radius:12px;margin:5px 0 10px}.admin label{font-size:12px;color:var(--muted);font-weight:700}.admin-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.small{font-size:12px;color:var(--muted);line-height:1.5}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#eef2f5;color:#111;padding:12px 18px;border-radius:12px;font-weight:800;display:none;z-index:5}
+@media(max-width:520px){.summary-grid,.admin-row{grid-template-columns:1fr}.hero h1{font-size:46px}.question h2{font-size:30px}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Mērķu Izsekotājs</h1>
-      <nav>
-        <button id="daily-btn">Ikdienas Mērķi</button>
-        <button id="medium-btn">Vidēja Termiņa Mērķi</button>
-        <button id="long-btn">Ilgtermiņa Mērķi</button>
-        <button id="show-all-btn">Rādīt Visus Mērķus</button>
-      </nav>
-    </header>
+<div class="app">
+  <div class="top"><div class="brand">FITFLOW</div><div class="pill" id="topPill">Personal Trainer</div></div>
 
-    <main>
-      <!-- Mērķu Kategorijas -->
-      <section id="daily-section" class="goal-section">
-        <h2>Ikdienas Mērķi</h2>
-        <ul id="daily-goals"></ul>
-        <input type="text" id="daily-input" placeholder="Pievienojiet ikdienas mērķi (nospiediet Enter)">
-      </section>
+  <section id="welcome" class="screen active">
+    <div class="hero">
+      <div class="eyebrow">Your training. Your plan.</div>
+      <h1>Build a workout that fits your life.</h1>
+      <p>Answer a few quick questions and FitFlow will create a training plan based on your goal, experience, schedule, time and equipment.</p>
+      <button class="primary" onclick="start()">Get started →</button>
+    </div>
+  </section>
 
-      <section id="medium-section" class="goal-section">
-        <h2>Vidēja Termiņa Mērķi</h2>
-        <ul id="medium-goals"></ul>
-        <input type="text" id="medium-input" placeholder="Pievienojiet vidēja termiņa mērķi (nospiediet Enter)">
-        <input type="date" id="medium-deadline">
-      </section>
+  <section id="onboarding" class="screen">
+    <div class="progress"><i id="progress"></i></div>
+    <div id="question" class="question"></div>
+    <div class="actions"><button id="backBtn" class="secondary" onclick="prev()">Back</button><button id="nextBtn" class="primary" onclick="next()">Continue →</button></div>
+    <div id="error" class="error"></div>
+  </section>
 
-      <section id="long-section" class="goal-section">
-        <h2>Ilgtermiņa Mērķi</h2>
-        <ul id="long-goals"></ul>
-        <input type="text" id="long-input" placeholder="Pievienojiet ilgtermiņa mērķi (nospiediet Enter)">
-        <input type="date" id="long-deadline">
-      </section>
-    </main>
-  </div>
+  <section id="result" class="screen">
+    <div class="hero"><div class="eyebrow">Your plan is ready</div><h1 id="planTitle">Your Personal Plan</h1><p id="planIntro"></p></div>
+    <div id="summary"></div>
+    <div class="nav" id="dayNav"></div>
+    <div id="workout"></div>
+    <div class="actions"><button class="secondary" onclick="restart()">Change answers</button><button class="primary" onclick="show('admin')">Admin →</button></div>
+  </section>
 
-  <script src="script.js"></script>
+  <section id="admin" class="screen admin">
+    <div class="hero"><div class="eyebrow">Owner area</div><h1>Program editor.</h1><p>Edit exercises and programs without changing the code. This demo stores changes in this browser using localStorage.</p></div>
+    <div class="admin-card">
+      <h3>Add exercise</h3>
+      <div class="admin-row"><div><label>Name</label><input id="exName"></div><div><label>Muscle group</label><input id="exMuscle"></div></div>
+      <div class="admin-row"><div><label>Equipment</label><input id="exEquip"></div><div><label>Difficulty</label><select id="exDiff"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div></div>
+      <div class="admin-row"><div><label>Default sets</label><input id="exSets" type="number" value="3"></div><div><label>Rep range</label><input id="exReps" value="8-12"></div></div>
+      <label>Instructions</label><textarea id="exInfo"></textarea>
+      <button class="primary" onclick="addExercise()">Add exercise</button>
+    </div>
+    <div class="admin-card"><h3>Current exercise database</h3><div id="exerciseList"></div></div>
+    <div class="admin-card"><h3>Program controls</h3><p class="small">The generator currently uses structured rules to choose from this database. You can expand the program database later with exact plans, weekly progression and client-specific templates.</p><button class="secondary" onclick="resetData()">Reset demo database</button> <button class="secondary" onclick="show('welcome')">Exit admin</button></div>
+  </section>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const defaultExercises=[
+{name:"Goblet Squat",muscle:"Legs",equip:"Dumbbell",diff:"Beginner",sets:3,reps:"8-12",info:"Keep your chest tall, brace your core and control the descent."},
+{name:"Barbell Back Squat",muscle:"Legs",equip:"Full gym",diff:"Intermediate",sets:3,reps:"6-10",info:"Brace hard, keep your feet stable and move with controlled depth."},
+{name:"Romanian Deadlift",muscle:"Hamstrings",equip:"Barbell",diff:"Intermediate",sets:3,reps:"8-12",info:"Push hips back while keeping the spine neutral."},
+{name:"Leg Press",muscle:"Legs",equip:"Full gym",diff:"Beginner",sets:3,reps:"10-15",info:"Use a controlled range and avoid locking the knees aggressively."},
+{name:"Bench Press",muscle:"Chest",equip:"Full gym",diff:"Intermediate",sets:3,reps:"6-10",info:"Keep shoulder blades set and lower the bar under control."},
+{name:"Dumbbell Bench Press",muscle:"Chest",equip:"Dumbbells",diff:"Beginner",sets:3,reps:"8-12",info:"Keep wrists stacked and use a controlled eccentric."},
+{name:"Lat Pulldown",muscle:"Back",equip:"Full gym",diff:"Beginner",sets:3,reps:"8-12",info:"Pull elbows down toward your sides without swinging."},
+{name:"One-Arm Dumbbell Row",muscle:"Back",equip:"Dumbbells",diff:"Beginner",sets:3,reps:"8-12",info:"Keep your torso stable and pull toward your hip."},
+{name:"Seated Cable Row",muscle:"Back",equip:"Full gym",diff:"Beginner",sets:3,reps:"10-12",info:"Keep your chest tall and squeeze the shoulder blades."},
+{name:"Shoulder Press",muscle:"Shoulders",equip:"Full gym",diff:"Intermediate",sets:3,reps:"8-12",info:"Brace your core and press without excessive lower-back arching."},
+{name:"Dumbbell Shoulder Press",muscle:"Shoulders",equip:"Dumbbells",diff:"Beginner",sets:3,reps:"8-12",info:"Press smoothly and keep ribs controlled."},
+{name:"Cable Lateral Raise",muscle:"Shoulders",equip:"Full gym",diff:"Beginner",sets:3,reps:"12-15",info:"Raise with control and avoid swinging."},
+{name:"Biceps Curl",muscle:"Biceps",equip:"Dumbbells",diff:"Beginner",sets:2,reps:"10-15",info:"Keep elbows stable and avoid using momentum."},
+{name:"Triceps Pushdown",muscle:"Triceps",equip:"Full gym",diff:"Beginner",sets:2,reps:"10-15",info:"Keep elbows close and control the return."},
+{name:"Plank",muscle:"Core",equip:"Bodyweight",diff:"Beginner",sets:3,reps:"30-60 sec",info:"Brace your core and keep hips aligned."},
+{name:"Walking Lunge",muscle:"Legs",equip:"Bodyweight",diff:"Beginner",sets:2,reps:"10-12/leg",info:"Take stable steps and keep the front knee controlled."}
+];
+let db=JSON.parse(localStorage.getItem("fitflowExercises")||"null")||defaultExercises;
+const q=[
+{id:"gender",title:"Are you a...",opts:[["Male",""],["Female",""],["Other / Prefer not to say",""]]},
+{id:"age",title:"How old are you?",input:"number",placeholder:"Enter your age",hint:"You must be 18 or older to use FitFlow."},
+{id:"height",title:"How tall are you?",input:"number",placeholder:"Height in cm",hint:"Example: 180"},
+{id:"experience",title:"How long have you been training?",opts:[["Complete beginner","New to structured training"],["Less than 6 months","Just getting started"],["6–12 months","Some consistent experience"],["1–2 years","Regular training experience"],["2+ years","Experienced lifter"]]},
+{id:"goal",title:"What do you want to achieve?",opts:[["Build muscle","Grow and develop muscle"],["Lose fat","Improve body composition"],["Get stronger","Increase strength"],["Improve fitness","Build overall conditioning"],["General health","Stay active and healthy"],["Athletic performance","Train for performance"]]},
+{id:"days",title:"How many days a week will you train?",opts:[["1 day",""],["2 days",""],["3 days",""],["4 days",""],["5 days",""],["6 days",""],["7 days",""]]},
+{id:"duration",title:"How long can each workout last?",opts:[["30 minutes","Quick session"],["45 minutes","Efficient session"],["60 minutes","Standard session"],["75 minutes","Longer session"],["90 minutes","Full session"]]},
+{id:"equipment",title:"Where do you train?",opts:[["Full gym","Machines, cables, barbells and dumbbells"],["Home gym","A range of home equipment"],["Dumbbells only","Adjustable or fixed dumbbells"],["Bodyweight","No equipment"]]}
+];
+let answers={},step=0,plan=null;
+function show(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");if(id==="admin")renderAdmin()}
+function start(){answers={};step=0;show("onboarding");renderQ()}
+function renderQ(){
+ const item=q[step], pct=Math.round((step/q.length)*100);
+ document.getElementById("progress").style.width=pct+"%";
+ document.getElementById("backBtn").style.visibility=step?"visible":"hidden";
+ document.getElementById("error").textContent="";
+ let html=`<h2>${item.title}</h2><p>${item.hint||"Choose the option that fits you best."}</p>`;
+ if(item.input) html+=`<input class="inputbox" id="inputAnswer" type="${item.input}" placeholder="${item.placeholder}" value="${answers[item.id]||""}" min="0">`;
+ else html+=`<div class="choices">${item.opts.map((o,i)=>`<button class="choice ${answers[item.id]===o[0]?"selected":""}" onclick="selectOpt('${item.id}',${i})"><strong>${o[0]}</strong>${o[1]?`<span>${o[1]}</span>`:""}</button>`).join("")}</div>`;
+ document.getElementById("question").innerHTML=html;
+}
+function selectOpt(id,i){answers[id]=q[step].opts[i][0];renderQ()}
+function next(){
+ const item=q[step];
+ if(item.input){const v=document.getElementById("inputAnswer").value.trim();if(!v){return err("Please enter a value.")}answers[item.id]=Number(v)}
+ if(item.id==="age" && answers.age<18){return err("You must be 18 or older to use FitFlow.")}
+ if(!answers[item.id])return err("Please choose an option.");
+ if(item.id==="height" && (answers.height<100||answers.height>250))return err("Please enter a realistic height in cm.");
+ if(step<q.length-1){step++;renderQ()}else generate()}
+function prev(){if(step>0){step--;renderQ()}}
+function err(t){document.getElementById("error").textContent=t}
+function compatible(e){
+ const x=answers.equipment;
+ if(x==="Bodyweight") return e.equip==="Bodyweight";
+ if(x==="Dumbbells only") return e.equip==="Dumbbells"||e.equip==="Bodyweight";
+ if(x==="Home gym") return ["Dumbbells","Bodyweight"].includes(e.equip)||e.equip==="Home gym";
+ return true;
+}
+function pick(muscle,used=[]){
+ let candidates=db.filter(e=>e.muscle===muscle&&compatible(e)&&!used.includes(e.name));
+ if(!candidates.length)candidates=db.filter(e=>compatible(e)&&!used.includes(e.name));
+ const exp=answers.experience;
+ const order=exp==="Complete beginner"||exp==="Less than 6 months"?["Beginner","Intermediate","Advanced"]:["Intermediate","Beginner","Advanced"];
+ candidates.sort((a,b)=>order.indexOf(a.diff)-order.indexOf(b.diff));
+ return candidates[0];
+}
+function generate(){
+ const days=Number(String(answers.days).split(" ")[0]), duration=Number(String(answers.duration).split(" ")[0]);
+ const goal=answers.goal, used=[];
+ let splits;
+ if(days===1)splits=[["Full Body",["Legs","Chest","Back","Shoulders","Core"]]];
+ else if(days===2)splits=[["Full Body A",["Legs","Chest","Back","Core"]],["Full Body B",["Legs","Shoulders","Back","Chest"]]];
+ else if(days===3)splits=[["Full Body A",["Legs","Chest","Back","Core"]],["Full Body B",["Legs","Shoulders","Back","Biceps"]],["Full Body C",["Legs","Chest","Back","Triceps"]]];
+ else if(days===4)splits=[["Upper A",["Chest","Back","Shoulders","Biceps"]],["Lower A",["Legs","Hamstrings","Core"]],["Upper B",["Chest","Back","Shoulders","Triceps"]],["Lower B",["Legs","Hamstrings","Core"]]];
+ else if(days===5)splits=[["Upper",["Chest","Back","Shoulders","Biceps"]],["Lower",["Legs","Hamstrings","Core"]],["Push",["Chest","Shoulders","Triceps"]],["Pull",["Back","Biceps","Core"]],["Legs",["Legs","Hamstrings","Core"]]];
+ else if(days===6)splits=[["Push A",["Chest","Shoulders","Triceps"]],["Pull A",["Back","Biceps","Core"]],["Legs A",["Legs","Hamstrings","Core"]],["Push B",["Chest","Shoulders","Triceps"]],["Pull B",["Back","Biceps","Core"]],["Legs B",["Legs","Hamstrings","Core"]]];
+ else splits=[["Push",["Chest","Shoulders","Triceps"]],["Pull",["Back","Biceps","Core"]],["Legs",["Legs","Hamstrings","Core"]],["Recovery / Mobility",["Core"]],["Upper",["Chest","Back","Shoulders"]],["Lower",["Legs","Hamstrings","Core"]],["Recovery / Light",["Core"]]];
+ plan=splits.map(([name,muscles])=>({name,exercises:muscles.map(m=>pick(m,used)).filter(Boolean).map(e=>{used.push(e.name);let sets=e.sets; if(duration<=30)sets=Math.max(2,sets-1); return {...e,sets}})}));
+ document.getElementById("planTitle").textContent=goal+" plan";
+ document.getElementById("planIntro").textContent=`A ${days}-day plan built around ${duration} minute sessions, your experience and available equipment.`;
+ document.getElementById("summary").innerHTML=`<div class="summary"><div class="summary-grid">
+ <div class="stat"><small>Goal</small><b>${goal}</b></div><div class="stat"><small>Experience</small><b>${answers.experience}</b></div>
+ <div class="stat"><small>Schedule</small><b>${days}× / week</b></div><div class="stat"><small>Session</small><b>${duration} min</b></div></div></div>`;
+ document.getElementById("dayNav").innerHTML=plan.map((d,i)=>`<button class="${i===0?"primary":"secondary"}" onclick="showDay(${i},this)">Day ${i+1}</button>`).join("");
+ show("result");showDay(0,document.querySelector("#dayNav button"));
+}
+function showDay(i,btn){
+ document.querySelectorAll("#dayNav button").forEach(b=>{b.className="secondary"});if(btn)btn.className="primary";
+ const d=plan[i];let total=Math.min(Number(String(answers.duration).split(" ")[0]),d.exercises.length*10+20);
+ document.getElementById("workout").innerHTML=`<div class="workout-card"><div class="workout-head"><h3>${d.name}</h3><span class="tag">~${total} min</span></div>${d.exercises.map(e=>`<div class="exercise"><div class="exercise-row"><div><h4>${e.name}</h4><p>${e.info}</p></div><div class="meta"><b>${e.sets} × ${e.reps}</b><span>Rest 60–120s</span></div></div></div>`).join("")}</div>`;
+}
+function restart(){start()}
+function save(){localStorage.setItem("fitflowExercises",JSON.stringify(db))}
+function addExercise(){
+ const name=document.getElementById("exName").value.trim();if(!name)return toast("Enter an exercise name.");
+ db.push({name,muscle:document.getElementById("exMuscle").value.trim()||"General",equip:document.getElementById("exEquip").value.trim()||"Bodyweight",diff:document.getElementById("exDiff").value,sets:Number(document.getElementById("exSets").value)||3,reps:document.getElementById("exReps").value||"8-12",info:document.getElementById("exInfo").value.trim()||"Use controlled technique and appropriate form."});save();renderAdmin();toast("Exercise added.");["exName","exMuscle","exEquip","exInfo"].forEach(id=>document.getElementById(id).value="");
+}
+function deleteEx(i){db.splice(i,1);save();renderAdmin()}
+function renderAdmin(){document.getElementById("exerciseList").innerHTML=db.map((e,i)=>`<div class="exercise"><div class="exercise-row"><div><h4>${e.name}</h4><p>${e.muscle} · ${e.equip} · ${e.diff}</p></div><button class="secondary" onclick="deleteEx(${i})">Delete</button></div></div>`).join("")}
+function resetData(){db=[...defaultExercises];save();renderAdmin();toast("Database reset.")}
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",1800)}
+</script>
 </body>
 </html>
-
